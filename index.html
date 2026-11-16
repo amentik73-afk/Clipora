@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clipora - AI Video Clips</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:white;font-family:Arial,sans-serif;padding:22px}
+header{font-size:27px;font-weight:bold;color:#8b7cff;margin:12px 0 40px}
+h1{font-size:34px;line-height:1.2}
+p{color:#aab1c5;line-height:1.6}
+.card{background:#151c2e;padding:20px;border-radius:18px;margin-top:25px}
+.upload{border:2px dashed #7565db;padding:35px 12px;text-align:center;border-radius:15px}
+button{background:#735cf5;color:white;border:0;padding:15px;border-radius:12px;width:100%;font-size:16px;margin-top:15px}
+input{margin-top:18px;width:100%}
+video{width:100%;border-radius:12px;margin-top:15px}
+small{color:#8993aa}
+</style>
+</head>
+<body>
+<header>✂ Clipora</header>
+<h1>Turn long videos into amazing short clips.</h1>
+<p>AI-powered video clipping for TikTok, Reels and YouTube Shorts.</p>
+<div class="card">
+<h2>Upload your video</h2>
+<div class="upload">
+<h1>🎬</h1>
+<p>Choose a video from your phone</p>
+<input type="file" id="file" accept="video/*">
+</div>
+<video id="video" controls hidden></video>
+<button onclick="preview()">Preview video</button>
+</div>
+<div class="card">
+<h2>AI Clip Maker ✨</h2>
+<p>Find the best moments and create short videos.</p>
+<button onclick="alert('AI processing will be added in the next version!')">✨ Generate AI Clips</button>
+<small>More features coming soon.</small>
+</div>
+<script>
+const file=document.getElementById('file');
+const video=document.getElementById('video');
+file.onchange=()=>{
+if(file.files[0]){
+video.src=URL.createObjectURL(file.files[0]);
+video.hidden=false;
+}
+};
+function preview(){
+if(file.files[0]) video.play();
+else alert('Please upload a video first.');
+}
+</script>
+</body>
+</html>
