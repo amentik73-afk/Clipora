@@ -3,54 +3,143 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Clipora - AI Video Clips</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clipora - AI Video Studio</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090d18;color:white;font-family:Arial,sans-serif;padding:22px}
-header{font-size:27px;font-weight:bold;color:#8b7cff;margin:12px 0 40px}
-h1{font-size:34px;line-height:1.2}
-p{color:#aab1c5;line-height:1.6}
-.card{background:#151c2e;padding:20px;border-radius:18px;margin-top:25px}
-.upload{border:2px dashed #7565db;padding:35px 12px;text-align:center;border-radius:15px}
-button{background:#735cf5;color:white;border:0;padding:15px;border-radius:12px;width:100%;font-size:16px;margin-top:15px}
-input{margin-top:18px;width:100%}
-video{width:100%;border-radius:12px;margin-top:15px}
-small{color:#8993aa}
+body{margin:0;background:#090d18;color:#f5f5ff;font-family:Arial,sans-serif}
+header{padding:20px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #252a40}
+.logo{font-size:27px;font-weight:bold;color:#a895ff}
+nav a{color:#bbb;text-decoration:none;margin-left:20px}
+main{max-width:1100px;margin:55px auto;padding:20px}
+.hero{text-align:center;margin-bottom:40px}
+h1{font-size:clamp(32px,6vw,54px);margin:10px}
+h1 span{color:#a895ff}
+.hero p{color:#a5abc1;line-height:1.7}
+.panel{background:#121a2c;border:1px solid #29334c;border-radius:20px;padding:28px;margin:20px 0}
+.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+button,.tab{border:0;border-radius:10px;padding:13px 19px;background:#252d43;color:white;cursor:pointer}
+button.primary{background:linear-gradient(100deg,#7959ed,#a16bfa);font-weight:bold}
+.tab.active{background:#7959ed}
+input,select{width:100%;padding:15px;margin:10px 0;background:#0b1120;border:1px solid #35405b;border-radius:10px;color:white}
+label{display:block;margin-top:18px;color:#c9cce0}
+.upload{border:2px dashed #59618a;border-radius:15px;padding:35px;text-align:center;color:#b9b9d5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.note{color:#929bb5;font-size:13px;line-height:1.6}
+.stat{background:#171f34;padding:20px;border-radius:13px}
+.stat strong{font-size:25px;color:#a895ff}
+footer{text-align:center;padding:35px;color:#858da5}
+#message{color:#9fdfc0;margin-top:15px}
 </style>
 </head>
 <body>
-<header>✂ Clipora</header>
-<h1>Turn long videos into amazing short clips.</h1>
-<p>AI-powered video clipping for TikTok, Reels and YouTube Shorts.</p>
-<div class="card">
-<h2>Upload your video</h2>
+<header>
+<div class="logo">✦ Clipora</div>
+<nav><a href="#studio">AI Studio</a><a href="#features">Features</a></nav>
+</header>
+
+<main>
+<section class="hero">
+<p>YOUR AI VIDEO WORKSPACE</p>
+<h1>Turn long videos into <span>viral clips.</span></h1>
+<p>Create content for TikTok, YouTube Shorts and Instagram Reels.<br>One video. Multiple possibilities.</p>
+</section>
+
+<section class="grid">
+<div class="stat"><strong>AI Studio</strong><p class="note">Your video workspace</p></div>
+<div class="stat"><strong>9:16</strong><p class="note">Vertical video format</p></div>
+<div class="stat"><strong>HD</strong><p class="note">Designed for social media</p></div>
+</section>
+
+<section class="panel" id="studio">
+<h2>✦ Create your clips</h2>
+<p class="note">Choose a video source to start your project.</p>
+
+<div class="tabs">
+<button class="tab active" id="linkTab" onclick="showTab('link')">YouTube Link</button>
+<button class="tab" id="fileTab" onclick="showTab('file')">Upload Video</button>
+</div>
+
+<div id="linkArea">
+<label>YouTube video URL</label>
+<input id="videoUrl" type="url" placeholder="https://www.youtube.com/watch?v=...">
+</div>
+
+<div id="fileArea" style="display:none">
+<label>Select your video</label>
 <div class="upload">
-<h1>🎬</h1>
-<p>Choose a video from your phone</p>
-<input type="file" id="file" accept="video/*">
+<input id="videoFile" type="file" accept="video/*">
+<p class="note">Choose a video from your device.</p>
 </div>
-<video id="video" controls hidden></video>
-<button onclick="preview()">Preview video</button>
 </div>
-<div class="card">
-<h2>AI Clip Maker ✨</h2>
-<p>Find the best moments and create short videos.</p>
-<button onclick="alert('AI processing will be added in the next version!')">✨ Generate AI Clips</button>
-<small>More features coming soon.</small>
+
+<div class="grid">
+<div>
+<label>Video format</label>
+<select id="format">
+<option>9:16 - TikTok / Reels / Shorts</option>
+<option>1:1 - Square</option>
+<option>16:9 - YouTube</option>
+</select>
 </div>
+<div>
+<label>Caption language</label>
+<select id="language">
+<option>English</option>
+<option>Arabic</option>
+<option>French</option>
+<option>Spanish</option>
+</select>
+</div>
+<div>
+<label>Caption style</label>
+<select id="caption">
+<option>Modern captions</option>
+<option>Bold captions</option>
+<option>Minimal captions</option>
+</select>
+</div>
+</div>
+
+<button class="primary" style="width:100%;margin-top:25px" onclick="startProject()">✦ Prepare my project</button>
+<p id="message"></p>
+<p class="note">Prototype mode: this page does not yet process videos with AI or export MP4 files. A backend and AI service must be connected for those features.</p>
+</section>
+
+<section class="panel" id="features">
+<h2>Made for creators</h2>
+<div class="grid">
+<div><h3>✂ Smart clipping</h3><p class="note">Prepare your workflow for finding the best moments.</p></div>
+<div><h3>💬 Captions</h3><p class="note">Choose your preferred caption language and style.</p></div>
+<div><h3>📱 Social formats</h3><p class="note">Set the format for your target platform.</p></div>
+</div>
+</section>
+</main>
+
+<footer>Clipora © 2026 · Create more. Edit smarter.</footer>
+
 <script>
-const file=document.getElementById('file');
-const video=document.getElementById('video');
-file.onchange=()=>{
-if(file.files[0]){
-video.src=URL.createObjectURL(file.files[0]);
-video.hidden=false;
+let source="link";
+function showTab(type){
+source=type;
+document.getElementById("linkArea").style.display=type==="link"?"block":"none";
+document.getElementById("fileArea").style.display=type==="file"?"block":"none";
+document.getElementById("linkTab").classList.toggle("active",type==="link");
+document.getElementById("fileTab").classList.toggle("active",type==="file");
 }
-};
-function preview(){
-if(file.files[0]) video.play();
-else alert('Please upload a video first.');
+function startProject(){
+let message=document.getElementById("message");
+if(source==="link"){
+let url=document.getElementById("videoUrl").value.trim();
+if(!url){message.textContent="Please enter a YouTube video link.";return;}
+if(!url.includes("youtube.com/")&&!url.includes("youtu.be/")){
+message.textContent="Please enter a valid YouTube link.";return;
+}
+}else{
+let file=document.getElementById("videoFile").files[0];
+if(!file){message.textContent="Please choose a video first.";return;}
+}
+message.textContent="Your project settings are ready. AI processing is not connected yet.";
 }
 </script>
 </body>
