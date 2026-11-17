@@ -2,31 +2,25 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const corsHeaders = {
+
+    const headers = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      "Access-Control-Allow-Headers": "Content-Type"
     };
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
-    }
 
     const json = (data, status = 200) =>
       new Response(JSON.stringify(data), {
         status,
-        headers: {
-          ...corsHeaders,
-          "Content-Type": "application/json"
-        }
+        headers: { ...headers, "Content-Type": "application/json" }
       });
 
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers });
+    }
+
     if (url.pathname === "/api/health") {
-      return json({
-        status: "online",
-        app: "Clipora",
-        message: "Clipora backend is running"
-      });
+      return json({ app: "Clipora", status: "online" });
     }
 
     if (url.pathname === "/api/projects" && request.method === "POST") {
@@ -38,10 +32,8 @@ export default {
         return json({ error: "Invalid JSON" }, 400);
       }
 
-      if (!data || (!data.videoUrl && !data.fileName)) {
-        return json({
-          error: "Please provide a video URL or file name"
-        }, 400);
+      if (!data.videoUrl && !data.fileName) {
+        return json({ error: "Video URL or file name required" }, 400);
       }
 
       return json({
@@ -52,17 +44,12 @@ export default {
           videoUrl: data.videoUrl || null,
           fileName: data.fileName || null,
           format: data.format || "9:16",
-          language: data.language || "English",
-          createdAt: new Date().toISOString()
+          language: data.language || "English"
         },
         message: "Project received. AI processing is not connected yet."
       }, 201);
     }
 
-    return json({
-      app: "Clipora",
-      status: "online",
-      endpoints: ["/api/health", "/api/projects"]
-    });
+    return env.ASSETS.fetch(request);
   }
 };
