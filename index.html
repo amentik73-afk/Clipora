@@ -118,29 +118,88 @@ footer{text-align:center;padding:35px;color:#858da5}
 
 <footer>Clipora © 2026 · Create more. Edit smarter.</footer>
 
+
 <script>
-let source="link";
-function showTab(type){
-source=type;
-document.getElementById("linkArea").style.display=type==="link"?"block":"none";
-document.getElementById("fileArea").style.display=type==="file"?"block":"none";
-document.getElementById("linkTab").classList.toggle("active",type==="link");
-document.getElementById("fileTab").classList.toggle("active",type==="file");
+let source = "link";
+
+function showTab(type) {
+  source = type;
+
+  document.getElementById("linkArea").style.display =
+    type === "link" ? "block" : "none";
+
+  document.getElementById("fileArea").style.display =
+    type === "file" ? "block" : "none";
+
+  document.getElementById("linkTab").classList.toggle("active", type === "link");
+  document.getElementById("fileTab").classList.toggle("active", type === "file");
 }
-function startProject(){
-let message=document.getElementById("message");
-if(source==="link"){
-let url=document.getElementById("videoUrl").value.trim();
-if(!url){message.textContent="Please enter a YouTube video link.";return;}
-if(!url.includes("youtube.com/")&&!url.includes("youtu.be/")){
-message.textContent="Please enter a valid YouTube link.";return;
-}
-}else{
-let file=document.getElementById("videoFile").files[0];
-if(!file){message.textContent="Please choose a video first.";return;}
-}
-message.textContent="Your project settings are ready. AI processing is not connected yet.";
+
+async function startProject() {
+  const message = document.getElementById("message");
+  const button = document.querySelector(".primary");
+  let data = {};
+
+  if (source === "link") {
+    const url = document.getElementById("videoUrl").value.trim();
+
+    if (!url) {
+      message.textContent = "Please enter a YouTube video link.";
+      return;
+    }
+
+    if (!url.includes("youtube.com/") && !url.includes("youtu.be/")) {
+      message.textContent = "Please enter a valid YouTube link.";
+      return;
+    }
+
+    data.videoUrl = url;
+  } else {
+    const file = document.getElementById("videoFile").files[0];
+
+    if (!file) {
+      message.textContent = "Please choose a video first.";
+      return;
+    }
+
+    data.fileName = file.name;
+  }
+
+  data.format = document.getElementById("format").value;
+  data.language = document.getElementById("language").value;
+
+  button.disabled = true;
+  button.textContent = "Sending project...";
+  message.textContent = "Connecting to Clipora backend...";
+
+  try {
+    const response = await fetch("/api/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Something went wrong.");
+    }
+
+    message.textContent =
+      "Success! Project ID: " + result.project.id +
+      " | Status: " + result.project.status +
+      ". AI processing is not connected yet.";
+
+  } catch (error) {
+    message.textContent = "Error: " + error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "✦ Prepare my project";
+  }
 }
 </script>
 </body>
 </html>
+
